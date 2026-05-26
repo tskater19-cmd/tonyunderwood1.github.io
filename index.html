@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tony Underwood</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0f0e0c;--ink2:#3d3b37;--ink3:#7a7772;
+  --paper:#f7f4ef;
+  --gold:#9c7c3a;--gold2:#c4a265;--gold3:#e8d5b0;
+  --rule:rgba(15,14,12,0.1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Cormorant Garamond',Georgia,serif;background:var(--paper);color:var(--ink);overflow-x:hidden;min-height:100vh}
+
+.texture{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(15,14,12,0.06) 1px,transparent 0);
+  background-size:28px 28px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2.5rem;
+  display:none;align-items:center;justify-content:space-between;
+  background:rgba(247,244,239,0.94);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--rule)}
+nav.on{display:flex}
+.nav-id{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+
+/* LANDING */
+#landing{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:1;padding:2rem;text-align:center}
+@keyframes rise{to{opacity:1;transform:none}}
+.land-kicker{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1.75rem;opacity:0;animation:rise .7s ease .6s forwards}
+.land-name{font-size:clamp(60px,11vw,108px);font-weight:300;line-height:.95;letter-spacing:-.015em;margin-bottom:1.25rem;opacity:0;animation:rise .8s ease .8s forwards}
+.land-name em{font-style:italic;color:var(--gold)}
+.land-tag{font-size:19px;font-weight:300;font-style:italic;color:var(--ink2);margin-bottom:3rem;opacity:0;animation:rise .7s ease 1s forwards}
+.cta{display:inline-flex;align-items:center;gap:14px;padding:15px 40px;border:1px solid var(--ink);background:transparent;color:var(--ink);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .28s;text-decoration:none;opacity:0;animation:rise .7s ease 1.2s forwards}
+.cta:hover{background:var(--ink);color:var(--paper)}
+.cta .arr{transition:transform .28s}
+.cta:hover .arr{transform:translateX(5px)}
+.scroll-nudge{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);opacity:0;animation:rise .6s ease 1.8s forwards}
+.scroll-bar{width:1px;height:44px;background:var(--ink3);animation:pulse 2s ease-in-out infinite 2.2s}
+@keyframes pulse{0%,100%{opacity:.3;transform:scaleY(1)}50%{opacity:.9;transform:scaleY(.55)}}
+
+/* MAIN */
+#main{display:none;max-width:900px;margin:0 auto;padding:0 2rem 7rem;position:relative;z-index:1}
+#main.on{display:block}
+
+.divider{display:flex;align-items:center;gap:1.25rem;margin:5.5rem 0 2.75rem}
+.div-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+.div-line{flex:1;height:1px;background:var(--rule)}
+.div-num{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);letter-spacing:.1em}
+
+/* HERO */
+.hero{padding:4.5rem 0 3rem;border-bottom:1px solid var(--rule)}
+.hero-headline{font-size:clamp(28px,4.5vw,48px);font-weight:300;line-height:1.2;max-width:680px;margin-bottom:1.5rem}
+.hero-headline em{font-style:italic;color:var(--gold)}
+.hero-body{font-size:17px;font-weight:300;color:var(--ink2);line-height:1.8;max-width:580px;margin-bottom:2.5rem}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--rule);border-left:1px solid var(--rule);margin-top:2.5rem}
+.pillar{padding:1.5rem 1.25rem;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.pillar-val{font-size:38px;font-weight:300;line-height:1;color:var(--ink)}
+.pillar-val sup{font-size:18px;vertical-align:super}
+.pillar-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin-top:8px}
+
+/* EXPERIENCE */
+.exp{padding:2.25rem 0;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:200px 1fr;gap:2.5rem}
+.exp-period{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);letter-spacing:.08em;margin-bottom:10px}
+.exp-co{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.06em}
+.exp-loc{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);letter-spacing:.06em;margin-top:4px}
+.exp-role{font-size:26px;font-weight:300;margin-bottom:1rem}
+.exp-bullets{list-style:none;padding:0}
+.exp-bullets li{font-size:15.5px;font-weight:300;color:var(--ink2);line-height:1.7;padding:5px 0;padding-left:16px;position:relative}
+.exp-bullets li::before{content:'—';position:absolute;left:0;color:var(--gold2);font-size:13px}
+.exp-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:1.25rem}
+.chip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--rule);color:var(--ink3)}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2.5rem}
+.skill-cat h3{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem;padding-bottom:.6rem;border-bottom:1px solid var(--rule)}
+.skill-cat ul{list-style:none}
+.skill-cat li{font-size:17px;font-weight:300;color:var(--ink2);padding:7px 0;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:10px}
+.skill-cat li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold2);flex-shrink:0}
+
+/* PROJECTS */
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+.proj-card{padding:1.75rem;border:1px solid var(--rule);transition:border-color .3s,background .3s}
+.proj-card:hover{border-color:var(--gold3);background:rgba(156,124,58,.03)}
+.proj-n{font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.12em;margin-bottom:.85rem}
+.proj-card h3{font-size:20px;font-weight:300;margin-bottom:.65rem}
+.proj-card p{font-size:14.5px;font-weight:300;color:var(--ink2);line-height:1.65}
+.proj-out{margin-top:1.1rem;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+
+/* EDUCATION */
+.edu{padding:1.75rem 0;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:200px 1fr;gap:2.5rem}
+.edu-yr{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);padding-top:4px}
+.edu-deg{font-size:24px;font-weight:300;margin-bottom:4px}
+.edu-sch{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.05em;margin-bottom:6px}
+.edu-detail{font-size:14px;font-weight:300;color:var(--ink3);font-style:italic;line-height:1.6}
+.edu-badge{display:inline-block;margin-top:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--gold3);color:var(--gold)}
+
+/* CONTACT */
+.contact-wrap{padding:4rem 0;text-align:center}
+.contact-wrap h2{font-size:clamp(34px,6vw,60px);font-weight:300;margin-bottom:.5rem}
+.contact-wrap h2 em{font-style:italic;color:var(--gold)}
+.contact-wrap .sub{font-size:17px;font-weight:300;font-style:italic;color:var(--ink3);margin-bottom:2.75rem}
+.contact-row{display:flex;justify-content:center;gap:2.5rem;flex-wrap:wrap}
+.c-link{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);text-decoration:none;padding-bottom:3px;border-bottom:1px solid var(--rule);transition:color .2s,border-color .2s}
+.c-link:hover{color:var(--gold);border-color:var(--gold)}
+
+/* REVEAL */
+.r{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.r.in{opacity:1;transform:none}
+
+@media(max-width:620px){
+  .exp,.edu{grid-template-columns:1fr;gap:.75rem}
+  .pillars{grid-template-columns:1fr 1fr}
+  .skills-grid,.proj-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="texture"></div>
+
+<nav id="nav">
+  <span class="nav-id">Tony Underwood</span>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- LANDING -->
+<section id="landing">
+  <p class="land-kicker">Finance · Analytics · Chicago</p>
+  <h1 class="land-name">Tony<br><em>Underwood</em></h1>
+  <p class="land-tag">Finance professional. NCAA captain. Data-driven by nature.</p>
+  <a href="#about" class="cta" id="cta">Enter <span class="arr">→</span></a>
+  <div class="scroll-nudge">
+    <span>Scroll</span>
+    <div class="scroll-bar"></div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- ABOUT -->
+  <section id="about" class="hero r">
+    <h2 class="hero-headline">The analyst who builds the model — <em>and</em> tells you what it means.</h2>
+    <p class="hero-body">I'm a finance and accounting grad with two years of hands-on experience at IRA Club in Chicago — analyzing portfolio cash flows, automating reporting in Python, and keeping alternative investment data clean and decision-ready. Before finance, I was a team captain for a Division III football program. That means I know how to perform under pressure, lead without authority, and show up every single day.</p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-val">$50K<sup>+</sup></div>
+        <div class="pillar-lbl">Raised for St. Jude</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-val">2yr<sup>+</sup></div>
+        <div class="pillar-lbl">At IRA Club, Chicago</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-val">4yr</div>
+        <div class="pillar-lbl">NCAA Team Captain</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <div class="divider r">
+    <span class="div-label">Experience</span><div class="div-line"></div><span class="div-num">01</span>
+  </div>
+  <section id="experience">
+
+    <div class="exp r">
+      <div>
+        <div class="exp-period">June 2024 — Present</div>
+        <div class="exp-co">IRA Club</div>
+        <div class="exp-loc">Chicago, IL</div>
+      </div>
+      <div>
+        <h3 class="exp-role">Financial Associate</h3>
+        <ul class="exp-bullets">
+          <li>Analyze portfolio cash flows, investment activity, and transaction trends across client accounts supporting operational oversight</li>
+          <li>Build and maintain Excel-based analytical reports and models to monitor portfolio activity and improve investment reporting visibility</li>
+          <li>Developed Python scripts to automate data entry, cleaning, and reporting workflows — reducing manual errors and saving hours per cycle</li>
+          <li>Partner cross-functionally with internal teams and custodians to resolve discrepancies and ensure accurate financial reporting</li>
+          <li>Manage multiple priorities in a deadline-driven environment while maintaining accuracy and high-quality client service</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="chip">Portfolio Analysis</span>
+          <span class="chip">Python Automation</span>
+          <span class="chip">Excel Modeling</span>
+          <span class="chip">Alt. Investments</span>
+          <span class="chip">Reconciliation</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp r">
+      <div>
+        <div class="exp-period">Jan 2024 — May 2024</div>
+        <div class="exp-co">United Way</div>
+        <div class="exp-loc">Saint Cloud, MN</div>
+      </div>
+      <div>
+        <h3 class="exp-role">Student Data Analyst</h3>
+        <ul class="exp-bullets">
+          <li>Built analytical models to identify financial trends, demand patterns, and performance drivers</li>
+          <li>Developed Tableau dashboards to present financial and operational performance to senior stakeholders</li>
+          <li>Translated complex datasets into clear, actionable insights supporting strategic resource allocation</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="chip">Tableau</span>
+          <span class="chip">Data Visualization</span>
+          <span class="chip">Financial Analysis</span>
+          <span class="chip">Stakeholder Reporting</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp r">
+      <div>
+        <div class="exp-period">Dec 2022 — Feb 2023</div>
+        <div class="exp-co">Landmark Wealth Mgmt</div>
+        <div class="exp-loc">Lake Elmo, MN</div>
+      </div>
+      <div>
+        <h3 class="exp-role">Finance Intern</h3>
+        <ul class="exp-bullets">
+          <li>Supported portfolio analysis and investment reporting within a wealth management environment</li>
+          <li>Analyzed portfolio activity, fee structures, and investment data to support performance evaluation</li>
+          <li>Assisted with investment research, reporting preparation, and financial analysis workflows</li>
+        </ul>
+        <div class="exp-tags">
+          <span class="chip">Wealth Management</span>
+          <span class="chip">Investment Research</span>
+          <span class="chip">Performance Reporting</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SKILLS -->
+  <div class="divider r">
+    <span class="div-label">Skills</span><div class="div-line"></div><span class="div-num">02</span>
+  </div>
+  <section id="skills">
+    <div class="skills-grid">
+      <div class="skill-cat r">
+        <h3>Financial Tools</h3>
+        <ul>
+          <li>Excel — Advanced (Pivot, XLOOKUP, INDEX MATCH)</li>
+          <li>Financial Modeling &amp; Forecasting</li>
+          <li>Portfolio Reporting</li>
+          <li>Variance Analysis</li>
+        </ul>
+      </div>
+      <div class="skill-cat r">
+        <h3>Data &amp; Analytics</h3>
+        <ul>
+          <li>Python (automation, data cleaning)</li>
+          <li>Tableau Dashboards</li>
+          <li>Data Visualization</li>
+          <li>KPI Reporting</li>
+        </ul>
+      </div>
+      <div class="skill-cat r">
+        <h3>Finance Knowledge</h3>
+        <ul>
+          <li>Investment Analysis</li>
+          <li>Alternative Investments</li>
+          <li>Portfolio Monitoring</li>
+          <li>Financial Statement Analysis</li>
+        </ul>
+      </div>
+      <div class="skill-cat r">
+        <h3>Professional</h3>
+        <ul>
+          <li>Cross-functional Collaboration</li>
+          <li>Stakeholder Presentations</li>
+          <li>Process Improvement</li>
+          <li>High-pressure Prioritization</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <div class="divider r">
+    <span class="div-label">Selected Projects</span><div class="div-line"></div><span class="div-num">03</span>
+  </div>
+  <section id="projects">
+    <div class="proj-grid">
+      <div class="proj-card r">
+        <div class="proj-n">01 — Automation</div>
+        <h3>Python Reporting Engine</h3>
+        <p>Built scripts at IRA Club to automate data entry, data cleaning, and recurring reporting workflows — turning a manual, error-prone process into a repeatable system.</p>
+        <div class="proj-out">&#8593; Fewer errors · Hours saved per cycle</div>
+      </div>
+      <div class="proj-card r">
+        <div class="proj-n">02 — Analytics</div>
+        <h3>United Way Tableau Suite</h3>
+        <p>Designed performance dashboards for United Way leadership, surfacing financial trends and operational KPIs in a visual format built for non-technical decision makers.</p>
+        <div class="proj-out">&#8593; Adopted by senior stakeholders</div>
+      </div>
+      <div class="proj-card r">
+        <div class="proj-n">03 — Reporting</div>
+        <h3>Portfolio Variance Tracker</h3>
+        <p>Built an Excel-based reporting system at IRA Club to monitor portfolio activity, flag variances across client accounts, and improve visibility into alternative investment holdings.</p>
+        <div class="proj-out">&#8593; Streamlined operational oversight</div>
+      </div>
+      <div class="proj-card r">
+        <div class="proj-n">04 — Leadership</div>
+        <h3>St. Jude Fundraising Campaign</h3>
+        <p>As NCAA team captain, led a fundraising initiative that raised over $50,000 for children's cancer research at St. Jude — coordinating teammates, external partners, and campaign logistics.</p>
+        <div class="proj-out">&#8593; $50,000+ raised</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <div class="divider r">
+    <span class="div-label">Education</span><div class="div-line"></div><span class="div-num">04</span>
+  </div>
+  <section id="education">
+    <div class="edu r">
+      <div class="edu-yr">2020 — 2024</div>
+      <div>
+        <div class="edu-deg">B.A. Accounting &amp; Finance</div>
+        <div class="edu-sch">Saint John's University — Collegeville, MN</div>
+        <div class="edu-detail">Minor in Data Analytics &middot; NCAA Division III Football &middot; Team Captain</div>
+        <span class="edu-badge">St. Jude Captain's Challenge — $50K+ raised</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <div class="divider r">
+    <span class="div-label">Get in Touch</span><div class="div-line"></div><span class="div-num">05</span>
+  </div>
+  <section id="contact">
+    <div class="contact-wrap r">
+      <h2>Ready when <em>you are.</em></h2>
+      <p class="sub">Open to finance, FP&amp;A, investment, and analytics roles in Chicago.</p>
+      <div class="contact-row">
+        <a href="mailto:tonyunderwood0110@gmail.com" class="c-link">&#9993; tonyunderwood0110@gmail.com</a>
+        <a href="https://linkedin.com/in/tonyunderwood1" class="c-link">in linkedin.com/in/tonyunderwood1</a>
+        <a href="tel:+19525003112" class="c-link">&#9742; 952.500.3112</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+const cta = document.getElementById('cta');
+const main = document.getElementById('main');
+const nav = document.getElementById('nav');
+const landing = document.getElementById('landing');
+
+function showMain() {
+  main.classList.add('on');
+  nav.classList.add('on');
+  document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+  setTimeout(initReveal, 300);
+}
+
+cta.addEventListener('click', function(e) {
+  e.preventDefault();
+  showMain();
+});
+
+window.addEventListener('scroll', function() {
+  const lb = landing.getBoundingClientRect().bottom;
+  if (lb < 0 && !main.classList.contains('on')) showMain();
+  if (lb < 0) nav.classList.add('on');
+  else nav.classList.remove('on');
+});
+
+function initReveal() {
+  const obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) e.target.classList.add('in');
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.r').forEach(function(el) { obs.observe(el); });
+}
+</script>
+
+</body>
+</html>
